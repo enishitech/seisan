@@ -97,3 +97,7 @@ Then you can generate seisan report.
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+-----
+
+&copy; 2013 Enishi Tech Inc.

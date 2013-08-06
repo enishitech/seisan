@@ -1,4 +1,4 @@
-Copyright (c) 2013 SHIMADA Koji
+Copyright (c) 2013 Enishi Tech Inc.
 
 MIT License
 
