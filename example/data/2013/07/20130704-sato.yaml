@@ -1,0 +1,10 @@
+applicant: 佐藤
+
+expense:
+ - date: 2013-07-03
+   amount: 105
+   remarks: 電池代
+
+ - date: 2013-07-04
+   amount: 2080
+   remarks: JR代

@@ -1,0 +1,10 @@
+applicant: 島田
+
+expense:
+ - date: 2013-07-05
+   amount: 2000
+   remarks: 書籍代
+
+ - date: 2013-07-05
+   amount: 1050
+   remarks: JR代
