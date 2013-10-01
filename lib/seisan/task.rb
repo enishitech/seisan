@@ -11,13 +11,17 @@ module Seisan
     def install
       desc "Generate seisan report"
       task :report do
-        config = {
-          organization_name: '株式会社えにしテック',
-          target: ENV['target'],
-        }
-        Seisan.report(config)
+        report(ENV['target'])
       end
       task :default => :report
+    end
+
+    def report(target)
+      config = {
+        organization_name: '株式会社えにしテック',
+        target: target,
+      }
+      Seisan.report(config)
     end
   end
 end
