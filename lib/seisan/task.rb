@@ -27,10 +27,10 @@ module Seisan
       source = Gimlet::DataStore.new(File.join(config[:src_base_path], config[:target]))
 
       requests = source.to_h.values
-      exporter = Seisan::Reporter.new(requests, config)
+      report = Seisan::Report.new(requests, config)
 
       dest_path = File.join(config[:dest_base_path], '%s.xlsx' % config[:target].gsub('/', '-'))
-      exporter.export(dest_path)
+      report.export(dest_path)
     end
 
     def default_src_base_path

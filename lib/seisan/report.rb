@@ -3,7 +3,7 @@ require 'fileutils'
 require 'seisan/expense_renderer'
 
 module Seisan
-  class Reporter
+  class Report
     RENDERES = [Seisan::ExpenseRenderer]
 
     def initialize(requests, config)
