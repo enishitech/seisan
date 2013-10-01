@@ -1,14 +1,29 @@
 require 'axlsx'
 require 'fileutils'
+require 'seisan/header_renderer'
 require 'seisan/expense_renderer'
 
 module Seisan
   class Report
-    RENDERES = [Seisan::ExpenseRenderer]
+    DEFAULT_RENDERERS = [
+      Seisan::HeaderRenderer,
+      Seisan::ExpenseRenderer
+    ]
+    @@renderers = DEFAULT_RENDERERS
 
-    def initialize(requests, target, config, output)
+    class << self
+      def renderer_chain(&block)
+        @@renderers = []
+        block.call(self) if block
+      end
+
+      def add(renderer)
+        @@renderers << renderer
+      end
+    end
+
+    def initialize(requests, config, output)
       @requests = requests
-      @target = target
       @config = config
       @output = output
     end
@@ -16,10 +31,7 @@ module Seisan
     def export(dest_path)
       prepare_sheet
 
-      render_global_header
-
-      section_renderers.each do |renderer|
-        row
+      renderers.each do |renderer|
         renderer.render
       end
 
@@ -27,17 +39,8 @@ module Seisan
     end
 
     private
-    def section_renderers
-      @section_renderers ||= RENDERES.map {|r| r.new(@requests, &self.method('row')) }
-    end
-
-    def render_global_header
-      row ["#{organization_name} 精算シート #{target_name}"]
-      row ['作成時刻', Time.now.strftime('%Y-%m-%d %X')]
-    end
-
-    def row(columns=[])
-      @sheet.add_row columns, :style => @font
+    def renderers
+      @@renderers.map {|r| r.new(@requests, @sheet, @font, @config) }
     end
 
     def prepare_sheet
@@ -52,14 +55,6 @@ module Seisan
       FileUtils.mkdir_p(File.dirname(dest_path))
       @package.serialize(dest_path)
       @output.puts 'Wrote to %s' % dest_path
-    end
-
-    def target_name
-      @target
-    end
-
-    def organization_name
-      @config[:organization] ? @config[:organization][:name] : ''
     end
   end
 end

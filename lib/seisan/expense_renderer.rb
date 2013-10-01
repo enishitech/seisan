@@ -4,18 +4,19 @@ require 'date'
 module Seisan
   class ExpenseRenderer < BaseRenderer
     def render
-      row.call ['立替払サマリー']
-      row.call summary_headings
+      row ['立替払サマリー']
+      row summary_headings
       summary.each do |person, amount|
-        row.call [person, amount]
+        row [person, amount]
       end
-      row.call
+      row
 
-      row.call ['立替払明細']
-      row.call headings
+      row ['立替払明細']
+      row headings
       lines.each do |line|
-        row.call line
+        row line
       end
+      row
     end
 
     private

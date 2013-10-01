@@ -13,23 +13,24 @@ module Seisan
       desc "Generate seisan report"
       task :seisan do
         src_dir, dest_dir = 'data', 'output'
-        report(src_dir, dest_dir, ENV['target'], $stdout)
+        config = user_config.merge('target' => ENV['target'])
+        report(src_dir, dest_dir, config, $stdout)
       end
       task :default => :seisan
     end
 
     private
-    def report(src_dir, dest_dir, target, output)
-      requests = load_seisan_requests(src_dir, target)
+    def report(src_dir, dest_dir, config, output)
+      requests = load_seisan_requests(src_dir, config['target'])
       display_load_status(requests, output)
-      report = Seisan::Report.new(requests, target, user_config, output)
+      report = Seisan::Report.new(requests, config, output)
 
-      dest_path = File.join(dest_dir, '%s.xlsx' % convert_target_to_file_name(target))
+      dest_path = File.join(dest_dir, '%s.xlsx' % convert_target_to_file_name(config['target']))
       report.export(dest_path)
     end
 
     def user_config
-      Gimlet::DataStore.new('config.yaml')
+      Gimlet::DataStore.new('config.yaml').to_h
     rescue Gimlet::DataStore::SourceNotFound
       {}
     end

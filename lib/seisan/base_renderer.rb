@@ -1,16 +1,18 @@
 module Seisan
   class BaseRenderer
-    def initialize(requests, &render_row_method)
+    def initialize(requests, sheet, font, config)
       @requests = requests
-      @render_row_method = render_row_method
+      @sheet = sheet
+      @font = font
+      @config = config
     end
 
     def requests
       @requests
     end
 
-    def row
-      @render_row_method
+    def row(columns=[])
+      @sheet.add_row columns, :style => @font
     end
   end
 end
