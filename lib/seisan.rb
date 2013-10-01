@@ -1,8 +1,8 @@
 require 'seisan/version'
-require 'seisan/request'
 require 'seisan/reporter'
 require 'seisan/base_renderer'
 require 'seisan/expense_renderer'
+require 'gimlet'
 
 module Seisan
   def self.default_dest_base_path
@@ -11,7 +11,12 @@ module Seisan
 
   def self.report(config, dest_base_path=default_dest_base_path)
     src_path = File.join(Dir.pwd, 'data', config[:target])
-    request = Seisan::Request.new(src_path)
-    request.export(config, dest_base_path)
+    source = Gimlet::DataStore.new(src_path)
+
+    requests = source.to_h.values
+    exporter = Seisan::Reporter.new(requests, config)
+
+    dest_path = File.join(dest_base_path, '%s.xlsx' % config[:target].gsub('/', '-'))
+    exporter.export(dest_path)
   end
 end
