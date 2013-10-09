@@ -22,10 +22,9 @@ module Seisan
       end
     end
 
-    def initialize(requests, config, output)
+    def initialize(requests, config)
       @requests = requests
       @config = config
-      @output = output
     end
 
     def export(dest_path)
@@ -54,7 +53,7 @@ module Seisan
     def write_to_file(dest_path)
       FileUtils.mkdir_p(File.dirname(dest_path))
       @package.serialize(dest_path)
-      @output.puts 'Wrote to %s' % dest_path
+      Seisan.logger.info 'Wrote to %s' % dest_path
     end
   end
 end

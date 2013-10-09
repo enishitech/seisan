@@ -14,16 +14,17 @@ module Seisan
       task :seisan do
         src_dir, dest_dir = 'data', 'output'
         config = user_config.merge('target' => ENV['target'])
-        report(src_dir, dest_dir, config, $stdout)
+        report(src_dir, dest_dir, config)
       end
       task :default => :seisan
     end
 
     private
-    def report(src_dir, dest_dir, config, output)
+    def report(src_dir, dest_dir, config)
+      Seisan.logger.info 'Processing %s ...' % config['target']
       requests = load_seisan_requests(src_dir, config['target'])
-      display_load_status(requests, output)
-      report = Seisan::Report.new(requests, config, output)
+      Seisan.logger.info 'Loaded %d files' % requests.size
+      report = Seisan::Report.new(requests, config)
 
       dest_path = File.join(dest_dir, '%s.xlsx' % convert_target_to_file_name(config['target']))
       report.export(dest_path)
@@ -40,11 +41,6 @@ module Seisan
       source.to_h.values
     rescue Gimlet::DataStore::SourceNotFound
       []
-    end
-
-    def display_load_status(requests, output)
-      entries = requests.empty? ? [] : requests.map {|e| e[:expense] }.flatten
-      output.puts 'Loaded %d files, %d expense entries.' % [requests.size, entries.size]
     end
 
     def convert_target_to_file_name(target)

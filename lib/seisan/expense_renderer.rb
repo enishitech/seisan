@@ -17,6 +17,8 @@ module Seisan
         row line
       end
       row
+
+      Seisan.logger.info 'Processed %d expenses' % lines.size
     end
 
     private
