@@ -21,6 +21,11 @@ module Seisan
 
     private
     def report(src_dir, dest_dir, config)
+      if config['target'].nil?
+        Seisan.logger.error "You must specify the 'target'.\nExample:\n  % bundle exec rake target=2013/07"
+        exit
+      end
+
       Seisan.logger.info 'Processing %s ...' % config['target']
       requests = load_seisan_requests(src_dir, config['target'])
       Seisan.logger.info 'Loaded %d files' % requests.size
