@@ -34,7 +34,7 @@ Create `data` directory to store data.
 OK, now everything is set up. Run
 
 ```shell
-% bundle exec rake seisan target=2013/07
+% bundle exec rake seisan TARGET=2013/07
 ```
 
 Then you will have an empty monthly report (because you have no record in seisan data) at `output/2013-07.xlsx`.
@@ -87,7 +87,7 @@ Put `Rakefile` to your seisan data repository,
 Then you can generate seisan report.
 
 ```shell
-% bundle exec rake seisan target=2013/07
+% bundle exec rake seisan TARGET=2013/07
 ```
 
 ## Contributing

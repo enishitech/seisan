@@ -13,7 +13,7 @@ module Seisan
       desc "Generate seisan report"
       task :seisan do
         src_dir, dest_dir = 'data', 'output'
-        config = user_config.merge('target' => ENV['target'])
+        config = user_config.merge('target' => ENV['TARGET'])
         report(src_dir, dest_dir, config)
       end
       task :default => :seisan
@@ -22,7 +22,7 @@ module Seisan
     private
     def report(src_dir, dest_dir, config)
       if config['target'].nil?
-        Seisan.logger.error "You must specify the 'target'.\nExample:\n  % bundle exec rake target=2013/07"
+        Seisan.logger.error "You must specify the 'TARGET'.\nExample:\n  % bundle exec rake TARGET=2013/07"
         exit
       end
 
