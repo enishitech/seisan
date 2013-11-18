@@ -18,9 +18,8 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
-  spec.add_runtime_dependency "axlsx", "~> 1.3.6"
-  spec.add_runtime_dependency "gimlet", "~> 0.0.2"
-  spec.add_runtime_dependency "zip-zip"
+  spec.add_runtime_dependency "axlsx", "~> 2.0.1"
+  spec.add_runtime_dependency "gimlet", "~> 0.0.3"
 
   spec.add_development_dependency "bundler", "~> 1.3"
   spec.add_development_dependency "rake"
