@@ -102,3 +102,7 @@ Then you can generate seisan report.
 -----
 
 &copy; 2013 Enishi Tech Inc.
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/enishitech/seisan/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
