@@ -21,6 +21,7 @@ module Seisan
     private
     def report(src_dir, dest_dir, target, output)
       requests = load_seisan_requests(src_dir, target)
+      display_load_status(requests, output)
       report = Seisan::Report.new(requests, target, user_config, output)
 
       dest_path = File.join(dest_dir, '%s.xlsx' % convert_target_to_file_name(target))
@@ -38,6 +39,11 @@ module Seisan
       source.to_h.values
     rescue Gimlet::DataStore::SourceNotFound
       []
+    end
+
+    def display_load_status(requests, output)
+      entries = requests.empty? ? [] : requests.map {|e| e[:expense] }.flatten
+      output.puts 'Loaded %d files, %d expense entries.' % [requests.size, entries.size]
     end
 
     def convert_target_to_file_name(target)
