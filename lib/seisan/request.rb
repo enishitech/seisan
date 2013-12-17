@@ -7,8 +7,8 @@ module Seisan
     end
 
     def export(config, dest_base_path)
-      exporter = Seisan::Reporter.new(self, config)
-      dest_path = File.join(dest_base_path, '%04d-%02d.xlsx' % [config[:year], config[:month]])
+      exporter = Seisan::Reporter.new(entries, config)
+      dest_path = File.join(dest_base_path, '%s.xlsx' % config[:target].gsub('/', '-'))
       exporter.export(dest_path)
     end
 

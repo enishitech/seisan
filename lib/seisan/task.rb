@@ -13,8 +13,7 @@ module Seisan
       task :report do
         config = {
           organization_name: '株式会社えにしテック',
-          month: ENV['month'],
-          year: ENV['year'],
+          target: ENV['target'],
         }
         Seisan.report(config)
       end

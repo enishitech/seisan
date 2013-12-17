@@ -6,8 +6,8 @@ module Seisan
   class Reporter
     RENDERES = [Seisan::ExpenseRenderer]
 
-    def initialize(request, config)
-      @request = request
+    def initialize(requests, config)
+      @requests = requests
       @config = config
     end
 
@@ -26,11 +26,11 @@ module Seisan
 
     private
     def section_renderers
-      @section_renderers ||= RENDERES.map {|r| r.new(@request, &self.method('row')) }
+      @section_renderers ||= RENDERES.map {|r| r.new(@requests, &self.method('row')) }
     end
 
     def render_global_header
-      row ["#{@config[:organization_name]} 精算シート %04d年%02d月" % [@config[:year], @config[:month]]]
+      row ["#{@config[:organization_name]} 精算シート #{@config[:target]}"]
       row ['作成時刻', Time.now.strftime('%Y-%m-%d %X')]
     end
 

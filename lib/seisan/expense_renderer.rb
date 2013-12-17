@@ -25,7 +25,7 @@ module Seisan
 
     def summary
       summary = Hash.new(0)
-      request.entries.each do |entry|
+      requests.each do |entry|
         summary[entry['applicant']] += entry['expense'].inject(0){|r, e| r += e['amount'].to_i }
       end
       summary
@@ -37,7 +37,7 @@ module Seisan
 
     def lines
       lines = []
-      request.entries.each do |entry|
+      requests.each do |entry|
         entry['expense'].each do |expense|
           lines << [expense['date'].to_s, entry['applicant'], expense['amount'], expense['remarks'], expense['notes']]
         end

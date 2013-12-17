@@ -1,12 +1,12 @@
 module Seisan
   class BaseRenderer
-    def initialize(request, &render_row_method)
-      @request = request
+    def initialize(requests, &render_row_method)
+      @requests = requests
       @render_row_method = render_row_method
     end
 
-    def request
-      @request
+    def requests
+      @requests
     end
 
     def row
