@@ -11,7 +11,6 @@ module Seisan
 
     def install
       desc "Generate seisan report"
-      task :report do
         config = {
           organization_name: '株式会社えにしテック',
           src_base_path: default_src_base_path,
@@ -19,8 +18,9 @@ module Seisan
           target: ENV['target'],
         }
         report(config)
+      task :seisan do
       end
-      task :default => :report
+      task :default => :seisan
     end
 
     def report(config)
