@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["koji.shimada@enishi-tech.com"]
   spec.description   = %q{seisan solution for small team}
   spec.summary       = %q{seisan solution for small team}
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/enishitech/seisan"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
