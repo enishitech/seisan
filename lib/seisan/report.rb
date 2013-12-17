@@ -6,9 +6,11 @@ module Seisan
   class Report
     RENDERES = [Seisan::ExpenseRenderer]
 
-    def initialize(requests, config)
+    def initialize(requests, target, config, output)
       @requests = requests
+      @target = target
       @config = config
+      @output = output
     end
 
     def export(dest_path)
@@ -30,7 +32,7 @@ module Seisan
     end
 
     def render_global_header
-      row ["#{@config[:organization_name]} 精算シート #{@config[:target]}"]
+      row ["#{organization_name} 精算シート #{target_name}"]
       row ['作成時刻', Time.now.strftime('%Y-%m-%d %X')]
     end
 
@@ -49,7 +51,15 @@ module Seisan
     def write_to_file(dest_path)
       FileUtils.mkdir_p(File.dirname(dest_path))
       @package.serialize(dest_path)
-      puts 'Wrote to %s' % dest_path
+      @output.puts 'Wrote to %s' % dest_path
+    end
+
+    def target_name
+      @target
+    end
+
+    def organization_name
+      @config[:organization] ? @config[:organization][:name] : ''
     end
   end
 end
