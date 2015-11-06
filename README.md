@@ -4,28 +4,14 @@ Seisan solution for small team.
 
 ## Installation
 
+Compile from Source.
+
+```
+% go get -u github.com/enishitech/seisan
+```
+
 You need a few steps to setup seisan data repository. `example` directory in `enishitech/seisan` will be a good reference for you.
 
-Put `Gemfile`:
-
-```
-source 'https://rubygems.org'
-
-gem 'rake'
-gem 'seisan'
-```
-
-Run bundler:
-
-```shell
-% bundle
-```
-
-Put `Rakefile`:
-
-```
-require 'seisan/task'
-```
 Create `data` directory to store data.
 
 ```shell
@@ -35,7 +21,7 @@ Create `data` directory to store data.
 OK, now everything is set up. Run
 
 ```shell
-% bundle exec rake seisan TARGET=2013/07
+% seisan 2013/07
 ```
 
 Then you will have an empty monthly report (because you have no record in seisan data) at `output/2013-07.xlsx`.
@@ -83,12 +69,10 @@ data
         └── 08-shidara.yaml
 ```
 
-Put `Rakefile` to your seisan data repository,
-
 Then you can generate seisan report.
 
 ```shell
-% bundle exec rake seisan TARGET=2013/07
+% seisan 2013/07
 ```
 
 ## Contributing
@@ -101,8 +85,7 @@ Then you can generate seisan report.
 
 -----
 
-&copy; 2013 Enishi Tech Inc.
-
+&copy; 2015 Enishi Tech Inc.
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/enishitech/seisan/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
