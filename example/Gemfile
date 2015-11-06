@@ -1,9 +1,0 @@
-source 'https://rubygems.org'
-
-gem 'rake'
-
-# Use development version. Usually you should want to use released version:
-#
-# gem 'seisan'
-#
-gem 'seisan', path: '..'
