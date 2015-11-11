@@ -43,8 +43,18 @@ func renderReportHeader(sheet *xlsx.Sheet, orgName, name string) {
 	cell = row.AddCell()
 }
 
-func (sr SeisanReporter) Report(conf *config.Config, requests []request.Request) error {
-	targetName := strings.Replace(conf.Target, "/", "-", -1)
+func (sr SeisanReporter) Report(baseDir string, target string) error {
+	conf, err := config.Load(filepath.Join(baseDir, "config.yaml"))
+	if err != nil {
+		return err
+	}
+
+	reqs, err := request.LoadDir(filepath.Join(baseDir, "data", target))
+	if err != nil {
+		return err
+	}
+
+	targetName := strings.Replace(target, "/", "-", -1)
 	xlsx.SetDefaultFont(11, "ＭＳ Ｐゴシック")
 
 	file := xlsx.NewFile()
@@ -56,7 +66,7 @@ func (sr SeisanReporter) Report(conf *config.Config, requests []request.Request)
 	renderReportHeader(sheet, targetName, conf.Organization["name"])
 
 	for _, r := range sr.reporters {
-		err := r.Report(sheet, conf, requests)
+		err := r.Report(sheet, conf, reqs)
 		if err != nil {
 			return err
 		}

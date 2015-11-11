@@ -8,12 +8,7 @@ import (
 )
 
 type Config struct {
-	Target       string
 	Organization map[string]string
-}
-
-func (self *Config) SetTarget(target string) {
-	self.Target = target
 }
 
 func Load(configPath string) (*Config, error) {
