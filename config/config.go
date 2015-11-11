@@ -8,7 +8,11 @@ import (
 )
 
 type Config struct {
-	Organization map[string]string
+	Organization
+}
+
+type Organization struct {
+	Name string
 }
 
 func Load(configPath string) (*Config, error) {

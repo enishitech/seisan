@@ -63,7 +63,7 @@ func (sr SeisanReporter) Report(baseDir string, target string) error {
 		return err
 	}
 
-	renderReportHeader(sheet, targetName, conf.Organization["name"])
+	renderReportHeader(sheet, targetName, conf.Organization.Name)
 
 	for _, r := range sr.reporters {
 		err := r.Report(sheet, conf, reqs)
