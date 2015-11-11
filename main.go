@@ -19,7 +19,7 @@ func main() {
 			if err != nil {
 				log.Fatal(err)
 			}
-			config.mergeCliArgs(args)
+			config.SetTarget(args.First())
 
 			fmt.Printf("Processing %s ...\n", config.Target)
 			seisanRequests, err := loadSeisanRequests(filepath.Join("data", config.Target))

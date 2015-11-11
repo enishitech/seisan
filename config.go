@@ -4,8 +4,6 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/codegangsta/cli"
-
 	"gopkg.in/yaml.v2"
 )
 
@@ -14,8 +12,8 @@ type Config struct {
 	Organization map[string]string
 }
 
-func (self *Config) mergeCliArgs(args cli.Args) {
-	self.Target = args.First()
+func (self *Config) SetTarget(target string) {
+	self.Target = target
 }
 
 func loadConfig(configPath string) (*Config, error) {
