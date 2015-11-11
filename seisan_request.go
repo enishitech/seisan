@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
-	"log"
 	"path/filepath"
 
 	"gopkg.in/yaml.v2"
@@ -27,10 +26,10 @@ func loadSeisanRequest(srcPath string) (*SeisanRequest, error) {
 	return &req, nil
 }
 
-func loadSeisanRequests(targetPath string) []SeisanRequest {
+func loadSeisanRequests(targetPath string) ([]SeisanRequest, error) {
 	entries, err := ioutil.ReadDir(targetPath)
 	if err != nil {
-		log.Fatal("ERROR: ", err.Error())
+		return nil, err
 	}
 	requests := []SeisanRequest{}
 
@@ -38,11 +37,11 @@ func loadSeisanRequests(targetPath string) []SeisanRequest {
 		path := filepath.Join(targetPath, entry.Name())
 		request, err := loadSeisanRequest(path)
 		if err != nil {
-			log.Fatal("ERROR: ", err.Error())
+			return nil, err
 		}
 		requests = append(requests, *request)
 	}
 	fmt.Printf("Loaded %d files\n", len(entries))
 
-	return requests
+	return requests, nil
 }

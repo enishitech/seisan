@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"path/filepath"
 
@@ -18,7 +19,10 @@ func main() {
 			config.mergeCliArgs(args)
 
 			fmt.Printf("Processing %s ...\n", config.Target)
-			seisanRequests := loadSeisanRequests(filepath.Join("data", config.Target))
+			seisanRequests, err := loadSeisanRequests(filepath.Join("data", config.Target))
+			if err != nil {
+				log.Fatal(err)
+			}
 			seisanReport := newSeisanReport(seisanRequests, config)
 			seisanReport.export()
 		} else {
