@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -40,7 +39,7 @@ func (self *SeisanReport) renderReportHeader(sheet *xlsx.Sheet, name string) {
 	cell = row.AddCell()
 }
 
-func (self *SeisanReport) export() {
+func (self *SeisanReport) export() error {
 	targetName := strings.Replace(self.config.Target, "/", "-", -1)
 
 	xlsx.SetDefaultFont(11, "ＭＳ Ｐゴシック")
@@ -48,7 +47,7 @@ func (self *SeisanReport) export() {
 	file := xlsx.NewFile()
 	sheet, err := file.AddSheet("精算シート")
 	if err != nil {
-		log.Fatal("ERROR: ", err.Error())
+		return err
 	}
 
 	self.renderReportHeader(sheet, targetName)
@@ -57,12 +56,13 @@ func (self *SeisanReport) export() {
 	destPath := filepath.Join("output", targetName+".xlsx")
 	if _, err := os.Stat("output"); os.IsNotExist(err) {
 		if err := os.Mkdir("output", 0777); err != nil {
-			log.Fatal("ERROR: ", err.Error())
+			return err
 		}
 	}
 	err = file.Save(destPath)
 	if err != nil {
-		log.Fatal("ERROR: ", err.Error())
+		return err
 	}
 	fmt.Printf("Wrote to %s\n", destPath)
+	return nil
 }

@@ -27,7 +27,9 @@ func main() {
 				log.Fatal(err)
 			}
 			seisanReport := newSeisanReport(seisanRequests, *config)
-			seisanReport.export()
+			if err := seisanReport.export(); err != nil {
+				log.Fatal(err)
+			}
 		} else {
 			fmt.Println("You must specify the 'TARGET'.\nExample:\n  % seisan 2015/10")
 		}
