@@ -5,7 +5,6 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"sort"
 	"strings"
 	"time"
 
@@ -19,97 +18,6 @@ import (
 
 type Reporter interface {
 	Report(*xlsx.Sheet, *config.Config, []request.Request) error
-}
-
-type ExpenseReporter struct{}
-
-func NewExpenseReporter() *ExpenseReporter {
-	return &ExpenseReporter{}
-}
-
-type ExpenseRequest struct {
-	Applicant       string          `yaml:"applicant"`
-	ExpeneseEntries []expense.Entry `yaml:"expense"`
-}
-
-func (reporter ExpenseReporter) renderSummary(sheet *xlsx.Sheet, sumByApplicant map[string]int) {
-	var row *xlsx.Row
-	var cell *xlsx.Cell
-
-	row = sheet.AddRow()
-	cell = row.AddCell()
-	cell.SetValue("立替払サマリー")
-	row = sheet.AddRow()
-	for _, heading := range []string{"氏名", "金額"} {
-		cell = row.AddCell()
-		cell.SetValue(heading)
-	}
-	for key, value := range sumByApplicant {
-		row = sheet.AddRow()
-		cell = row.AddCell()
-		cell.SetValue(key)
-		cell = row.AddCell()
-		cell.SetValue(value)
-	}
-	row = sheet.AddRow()
-	cell = row.AddCell()
-	cell.SetValue("")
-}
-
-type ByDate []expense.Entry
-
-func (a ByDate) Len() int           { return len(a) }
-func (a ByDate) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
-func (a ByDate) Less(i, j int) bool { return a[i].Date < a[j].Date }
-
-func (reporter ExpenseReporter) renderEntries(sheet *xlsx.Sheet, entries []expense.Entry) {
-	var row *xlsx.Row
-	var cell *xlsx.Cell
-
-	row = sheet.AddRow()
-	cell = row.AddCell()
-	cell.SetValue("立替払明細")
-	row = sheet.AddRow()
-	for _, heading := range []string{"日付", "立替者", "金額", "摘要", "備考"} {
-		cell = row.AddCell()
-		cell.SetValue(heading)
-	}
-	for _, detail := range entries {
-		row = sheet.AddRow()
-		cell = row.AddCell()
-		cell.SetValue(detail.Date)
-		cell = row.AddCell()
-		cell.SetValue(detail.Applicant)
-		cell = row.AddCell()
-		cell.SetValue(detail.Amount)
-		cell = row.AddCell()
-		cell.SetValue(detail.Remarks)
-	}
-}
-
-func (reporter ExpenseReporter) Report(sheet *xlsx.Sheet, conf *config.Config, requests []request.Request) error {
-	entries := make([]expense.Entry, 0)
-	sumByApplicant := make(map[string]int)
-	for _, req := range requests {
-		var er ExpenseRequest
-		if err := req.Unmarshal(&er); err != nil {
-			return err
-		}
-		if _, ok := sumByApplicant[er.Applicant]; !ok {
-			sumByApplicant[er.Applicant] = 0
-		}
-		for _, entry := range er.ExpeneseEntries {
-			entry.Applicant = er.Applicant
-			sumByApplicant[er.Applicant] += entry.Amount
-			entries = append(entries, entry)
-		}
-	}
-	sort.Sort(ByDate(entries))
-
-	reporter.renderSummary(sheet, sumByApplicant)
-	reporter.renderEntries(sheet, entries)
-
-	return nil
 }
 
 type SeisanReporter struct {
@@ -177,7 +85,7 @@ func main() {
 	app.Name = "seisan"
 	app.Usage = "Generate seisan report"
 
-	sr := NewSeisanReporter(*NewExpenseReporter())
+	sr := NewSeisanReporter(*expense.NewReporter())
 
 	app.Action = func(c *cli.Context) {
 		if args := c.Args(); args.Present() {
