@@ -72,9 +72,10 @@ func (sr SeisanReporter) Report(baseDir string, target string) error {
 		}
 	}
 
-	destPath := filepath.Join("output", targetName+".xlsx")
-	if _, err := os.Stat("output"); os.IsNotExist(err) {
-		if err := os.Mkdir("output", 0777); err != nil {
+	outputDir := filepath.Join(baseDir, "output")
+	destPath := filepath.Join(outputDir, targetName+".xlsx")
+	if _, err := os.Stat(outputDir); os.IsNotExist(err) {
+		if err := os.Mkdir(outputDir, 0777); err != nil {
 			return err
 		}
 	}
