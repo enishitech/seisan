@@ -14,6 +14,19 @@ type SeisanRequest struct {
 	Expenses  []Expense `yaml:"expense"`
 }
 
+func loadSeisanRequest(srcPath string) (*SeisanRequest, error) {
+	buf, err := ioutil.ReadFile(srcPath)
+	if err != nil {
+		return nil, err
+	}
+	var req SeisanRequest
+	err = yaml.Unmarshal(buf, &req)
+	if err != nil {
+		return nil, err
+	}
+	return &req, nil
+}
+
 func loadSeisanRequests(targetPath string) []SeisanRequest {
 	entries, err := ioutil.ReadDir(targetPath)
 	if err != nil {
@@ -22,17 +35,12 @@ func loadSeisanRequests(targetPath string) []SeisanRequest {
 	requests := []SeisanRequest{}
 
 	for _, entry := range entries {
-		entryPath := filepath.Join(targetPath, entry.Name())
-		buf, err := ioutil.ReadFile(entryPath)
+		path := filepath.Join(targetPath, entry.Name())
+		request, err := loadSeisanRequest(path)
 		if err != nil {
 			log.Fatal("ERROR: ", err.Error())
 		}
-		var req SeisanRequest
-		err = yaml.Unmarshal(buf, &req)
-		if err != nil {
-			log.Fatal("ERROR: ", err.Error())
-		}
-		requests = append(requests, req)
+		requests = append(requests, *request)
 	}
 	fmt.Printf("Loaded %d files\n", len(entries))
 
