@@ -1,4 +1,4 @@
-package main
+package config
 
 import (
 	"io/ioutil"
@@ -16,7 +16,7 @@ func (self *Config) SetTarget(target string) {
 	self.Target = target
 }
 
-func loadConfig(configPath string) (*Config, error) {
+func Load(configPath string) (*Config, error) {
 	var config Config
 
 	_, err := os.Stat(configPath)

@@ -8,16 +8,18 @@ import (
 	"time"
 
 	"github.com/tealeg/xlsx"
+
+	"github.com/enishitech/seisan/config"
 )
 
 type SeisanReport struct {
-	config        Config
+	config        config.Config
 	expenseReport *ExpenseReport
 }
 
-func newSeisanReport(seisanRequests []SeisanRequest, config Config) *SeisanReport {
+func newSeisanReport(seisanRequests []SeisanRequest, conf config.Config) *SeisanReport {
 	report := &SeisanReport{}
-	report.config = config
+	report.config = conf
 	report.expenseReport = newExpenseReport(seisanRequests)
 	return report
 }

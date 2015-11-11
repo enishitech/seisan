@@ -7,6 +7,8 @@ import (
 	"path/filepath"
 
 	"github.com/codegangsta/cli"
+
+	"github.com/enishitech/seisan/config"
 )
 
 func main() {
@@ -15,18 +17,18 @@ func main() {
 	app.Usage = "Generate seisan report"
 	app.Action = func(c *cli.Context) {
 		if args := c.Args(); args.Present() {
-			config, err := loadConfig("config.yaml")
+			conf, err := config.Load("config.yaml")
 			if err != nil {
 				log.Fatal(err)
 			}
-			config.SetTarget(args.First())
+			conf.SetTarget(args.First())
 
-			fmt.Printf("Processing %s ...\n", config.Target)
-			seisanRequests, err := loadSeisanRequests(filepath.Join("data", config.Target))
+			fmt.Printf("Processing %s ...\n", conf.Target)
+			seisanRequests, err := loadSeisanRequests(filepath.Join("data", conf.Target))
 			if err != nil {
 				log.Fatal(err)
 			}
-			seisanReport := newSeisanReport(seisanRequests, *config)
+			seisanReport := newSeisanReport(seisanRequests, *conf)
 			if err := seisanReport.export(); err != nil {
 				log.Fatal(err)
 			}
