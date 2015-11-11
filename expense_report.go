@@ -5,11 +5,13 @@ import (
 	"sort"
 
 	"github.com/tealeg/xlsx"
+
+	"github.com/enishitech/seisan/expense"
 )
 
 type ExpenseReport struct {
 	summary map[string]int
-	lines   []Expense
+	lines   []expense.Entry
 }
 
 func newExpenseReport(seisanRequests []SeisanRequest) *ExpenseReport {
@@ -32,14 +34,14 @@ func (self *ExpenseReport) makeSummary(seisanRequests []SeisanRequest) {
 	}
 }
 
-type ByDate []Expense
+type ByDate []expense.Entry
 
 func (a ByDate) Len() int           { return len(a) }
 func (a ByDate) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
 func (a ByDate) Less(i, j int) bool { return a[i].Date < a[j].Date }
 
 func (self *ExpenseReport) makeLines(in []SeisanRequest) {
-	self.lines = []Expense{}
+	self.lines = []expense.Entry{}
 	for _, seisanRequest := range in {
 		for _, expense := range seisanRequest.Expenses {
 			expense.Applicant = seisanRequest.Applicant

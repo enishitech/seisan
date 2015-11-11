@@ -6,11 +6,13 @@ import (
 	"path/filepath"
 
 	"gopkg.in/yaml.v2"
+
+	"github.com/enishitech/seisan/expense"
 )
 
 type SeisanRequest struct {
 	Applicant string
-	Expenses  []Expense `yaml:"expense"`
+	Expenses  []expense.Entry `yaml:"expense"`
 }
 
 func loadSeisanRequest(srcPath string) (*SeisanRequest, error) {

@@ -1,6 +1,6 @@
-package main
+package expense
 
-type Expense struct {
+type Entry struct {
 	Date      string
 	Applicant string
 	Amount    int
