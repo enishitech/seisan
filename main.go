@@ -15,7 +15,10 @@ func main() {
 	app.Usage = "Generate seisan report"
 	app.Action = func(c *cli.Context) {
 		if args := c.Args(); args.Present() {
-			config := loadConfig("config.yaml")
+			config, err := loadConfig("config.yaml")
+			if err != nil {
+				log.Fatal(err)
+			}
 			config.mergeCliArgs(args)
 
 			fmt.Printf("Processing %s ...\n", config.Target)
@@ -23,7 +26,7 @@ func main() {
 			if err != nil {
 				log.Fatal(err)
 			}
-			seisanReport := newSeisanReport(seisanRequests, config)
+			seisanReport := newSeisanReport(seisanRequests, *config)
 			seisanReport.export()
 		} else {
 			fmt.Println("You must specify the 'TARGET'.\nExample:\n  % seisan 2015/10")

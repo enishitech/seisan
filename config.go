@@ -2,7 +2,6 @@ package main
 
 import (
 	"io/ioutil"
-	"log"
 	"os"
 
 	"github.com/codegangsta/cli"
@@ -19,21 +18,21 @@ func (self *Config) mergeCliArgs(args cli.Args) {
 	self.Target = args.First()
 }
 
-func loadConfig(configPath string) Config {
+func loadConfig(configPath string) (*Config, error) {
 	var config Config
 
 	_, err := os.Stat(configPath)
 	if err != nil {
-		log.Fatal("ERROR: ", err.Error())
+		return nil, err
 	}
 
 	buf, err := ioutil.ReadFile(configPath)
 	if err != nil {
-		log.Fatal("ERROR: ", err.Error())
+		return nil, err
 	}
 	err = yaml.Unmarshal(buf, &config)
 	if err != nil {
-		log.Fatal("ERROR: ", err.Error())
+		return nil, err
 	}
-	return config
+	return &config, nil
 }
