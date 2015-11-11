@@ -11,10 +11,48 @@ import (
 	"github.com/enishitech/seisan/config"
 )
 
+type Reporter interface {
+	Report(*config.Config, []SeisanRequest) error
+}
+
+type ExpenseReporter struct{}
+
+func NewExpenseReporter() *ExpenseReporter {
+	return &ExpenseReporter{}
+}
+
+func (reporter ExpenseReporter) Report(conf *config.Config, requests []SeisanRequest) error {
+	seisanReport := newSeisanReport(requests, *conf)
+	return seisanReport.export()
+}
+
+type SeisanReporter struct {
+	reporters []Reporter
+}
+
+func NewSeisanReporter(reporters ...Reporter) *SeisanReporter {
+	sr := &SeisanReporter{}
+	sr.reporters = reporters
+	return sr
+}
+
+func (sr SeisanReporter) Report(conf *config.Config, requests []SeisanRequest) error {
+	for _, r := range sr.reporters {
+		err := r.Report(conf, requests)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 func main() {
 	app := cli.NewApp()
 	app.Name = "seisan"
 	app.Usage = "Generate seisan report"
+
+	sr := NewSeisanReporter(*NewExpenseReporter())
+
 	app.Action = func(c *cli.Context) {
 		if args := c.Args(); args.Present() {
 			conf, err := config.Load("config.yaml")
@@ -28,8 +66,7 @@ func main() {
 			if err != nil {
 				log.Fatal(err)
 			}
-			seisanReport := newSeisanReport(seisanRequests, *conf)
-			if err := seisanReport.export(); err != nil {
+			if err := sr.Report(conf, seisanRequests); err != nil {
 				log.Fatal(err)
 			}
 		} else {
