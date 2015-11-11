@@ -44,12 +44,17 @@ func renderReportHeader(sheet *xlsx.Sheet, orgName, name string) {
 }
 
 func (sr SeisanReporter) Report(baseDir string, target string) error {
-	conf, err := config.Load(filepath.Join(baseDir, "config.yaml"))
+	dataDir := filepath.Join(baseDir, "data")
+	outputDir := filepath.Join(baseDir, "output")
+	configPath := filepath.Join(baseDir, "config.yaml")
+	targetDir := filepath.Join(dataDir, target)
+
+	conf, err := config.Load(configPath)
 	if err != nil {
 		return err
 	}
 
-	reqs, err := request.LoadDir(filepath.Join(baseDir, "data", target))
+	reqs, err := request.LoadDir(targetDir)
 	if err != nil {
 		return err
 	}
@@ -72,7 +77,6 @@ func (sr SeisanReporter) Report(baseDir string, target string) error {
 		}
 	}
 
-	outputDir := filepath.Join(baseDir, "output")
 	destPath := filepath.Join(outputDir, targetName+".xlsx")
 	if _, err := os.Stat(outputDir); os.IsNotExist(err) {
 		if err := os.Mkdir(outputDir, 0777); err != nil {
